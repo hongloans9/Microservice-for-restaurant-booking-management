@@ -1,0 +1,42 @@
+networks:
+  restaurant-net:
+    driver: bridge
+
+services:
+  table-service:
+    build: ./table-service
+    container_name: table-service
+    networks:
+      - restaurant-net
+    environment:
+      - SERVICE_PORT=5555
+    expose:
+      - "5555"
+    restart: unless-stopped
+
+  reservation-service:
+    build: ./reservation-service
+    container_name: reservation-service
+    depends_on:
+      - table-service
+    networks:
+      - restaurant-net
+    environment:
+      - TABLE_SVC_URL=tcp://table-service:5555
+      - RESERVATION_SVC_PORT=5556
+      - EVENT_PUB_PORT=5557
+    ports:
+      - "5556:5556"
+      - "5557:5557"
+    restart: unless-stopped
+
+  notification-service:
+    build: ./notification-service
+    container_name: notification-service
+    depends_on:
+      - reservation-service
+    networks:
+      - restaurant-net
+    environment:
+      - RESERVATION_PUB_URL=tcp://reservation-service:5557
+    restart: unless-stopped
