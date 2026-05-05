@@ -2,6 +2,12 @@
 
 A containerised microservices prototype for a restaurant chain booking system, built as part of a Microservice Architecture course.
 
+## Demo
+
+https://github.com/user-attachments/assets/eedd270b-114b-45a3-957b-e9c4ee00ce45
+
+> Run `docker compose up -d` then `python3 client/test_client.py`
+
 ## Architecture
 
 ```
