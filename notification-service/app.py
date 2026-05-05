@@ -2,7 +2,7 @@
 Notification Service — async event consumer.
 
 Subscribes to the reservation-service event bus (ZeroMQ PUB/SUB,
-simulating RabbitMQ choreography from the Part 3 design).
+simulating RabbitMQ choreography).
 
 Handles: ReservationCreated, ReservationCancelled,
          ReservationArrived, ReservationSeated, ReservationCompleted

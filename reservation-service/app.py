@@ -6,7 +6,7 @@ Communication:
   REQ to TABLE_SVC_URL         : internal call to table-service (simulates gRPC from design)
   PUB on EVENT_PUB_PORT        : domain event bus (simulates RabbitMQ publish from design)
 
-State machine (Part 1 design):
+State machine:
   PENDING → CONFIRMED (table reserved successfully)
   CONFIRMED → ARRIVED → SEATED → COMPLETED  (staff-driven)
   CONFIRMED → CANCELLED  (24h cancellation policy)
@@ -33,7 +33,7 @@ EVENT_PUB_PORT     = int(os.getenv("EVENT_PUB_PORT",  "5557"))
 reservations: dict[str, dict] = {}
 _counter = 0
 
-# Valid staff-driven status progressions (Part 1 state machine)
+# Valid staff-driven status progressions
 STAFF_TRANSITIONS: dict[str, str] = {
     "CONFIRMED": "ARRIVED",
     "ARRIVED":   "SEATED",
@@ -42,7 +42,7 @@ STAFF_TRANSITIONS: dict[str, str] = {
 
 
 def make_envelope(event_type: str, data: dict) -> dict:
-    """Standard event envelope from Part 3 design."""
+    """Standard event envelope."""
     return {
         "event_type": event_type,
         "event_id":   str(uuid.uuid4()),
@@ -157,7 +157,7 @@ class ReservationService:
             return make_envelope("CancelReservationFailed",
                                  {"reason": "Reservation is already cancelled"})
 
-        # Business rule (Part 1): cancellation allowed up to 24 h before
+        # Business rule: cancellation allowed up to 24 h before
         try:
             res_dt = datetime.fromisoformat(
                 f"{res['reservation_date']}T{res['reservation_time']}"

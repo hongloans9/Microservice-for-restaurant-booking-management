@@ -14,7 +14,7 @@ RESERVATION_SVC_URL = "tcp://localhost:5556"
 
 
 def make_envelope(event_type: str, data: dict) -> dict:
-    """Standard event envelope matching the Part 3 design."""
+    """Standard event envelope."""
     return {
         "event_type": event_type,
         "event_id":   str(uuid.uuid4()),
